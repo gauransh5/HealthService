@@ -67,8 +67,6 @@ public class ApplicationUser {
 		this.user_name = user_name;
 		this.password = password;
 	}
-	
-	//    public Date user_dob;
     
 }
 

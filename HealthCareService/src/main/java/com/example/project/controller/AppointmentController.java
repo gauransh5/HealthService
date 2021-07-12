@@ -35,7 +35,7 @@ public class AppointmentController {
 		if(appointment2 != null) {
 			return new ResponseEntity<Object>(new responseBean("Booking successful"),HttpStatus.OK);
 		}
-		return new ResponseEntity<Object>(new responseBean("Booking fail"),HttpStatus.OK);
+		return new ResponseEntity<Object>(new responseBean("Booking failure"),HttpStatus.OK);
 	}
 	
 	@GetMapping("/appointment/list")
@@ -47,19 +47,19 @@ public class AppointmentController {
 	}
 	
 	@GetMapping("/appointment/view/{id}")
-	public Appointment fetchAppointmentById(@PathVariable int id)
+	public Appointment fetchAppointmentById(@PathVariable String id)
 	{
 		return service.fetchappointmentbyid(id);
 	}
 	
 	@GetMapping("/appointment/list/{id}")
-	public List<Appointment> fetchAllAppointmentsByPatientId(@PathVariable int id)
+	public List<Appointment> fetchAllAppointmentsByPatientId(@PathVariable String id)
 	{
 		return service.fetchallappointmentsbypatientid(id);
 	}
 	
 	@DeleteMapping("/appointment/delete/{id}")
-	public void deleteAppointmentById(@PathVariable int id)
+	public void deleteAppointmentById(@PathVariable String id)
 	{
 		service.deleteappointmentbyid(id);
 	}

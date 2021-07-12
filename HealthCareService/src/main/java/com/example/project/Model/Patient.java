@@ -57,7 +57,6 @@ public Patient( String patient_name, String patient_email, String patient_mobile
 	this.patient_name = patient_name;
 	this.patient_email = patient_email;
 	this.patient_mobile = patient_mobile;
-	//this.registeredDate = registeredDate;
 }
 public Patient() {
 	super();

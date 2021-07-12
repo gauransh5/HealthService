@@ -30,9 +30,9 @@ public class PatientController {
 	{
 		Patient patient2 =  service.addpatient(patient);
 		if(patient2 != null) {
-			return new ResponseEntity<Object>(new responseBean("Registretion successful"),HttpStatus.OK);
+			return new ResponseEntity<Object>(new responseBean("Registration successful"),HttpStatus.OK);
 		}
-		return new ResponseEntity<Object>(new responseBean("Registretion fail"),HttpStatus.OK);
+		return new ResponseEntity<Object>(new responseBean("Registration failure"),HttpStatus.OK);
 	}
 	
 	@GetMapping("/patient/list")
@@ -44,14 +44,14 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patient/view/{id}")
-	public Patient fetchPatientById(@PathVariable int id)
+	public Patient fetchPatientById(@PathVariable String id)
 	{
 		return service.fetchpatientbyid(id);
 	}
 	
 	
 	@DeleteMapping("/patient/delete/{id}")
-	public void deletePatientById(@PathVariable int id)
+	public void deletePatientById(@PathVariable String id)
 	{
 		service.deletepatientbyid(id);
 	}
