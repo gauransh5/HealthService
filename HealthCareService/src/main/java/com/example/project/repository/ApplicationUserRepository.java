@@ -8,5 +8,7 @@ import com.example.project.Model.ApplicationUser;
 
 public interface ApplicationUserRepository  extends JpaRepository<ApplicationUser, String>{
 
+	ApplicationUser findByUser_name(String id);
+
 }
 

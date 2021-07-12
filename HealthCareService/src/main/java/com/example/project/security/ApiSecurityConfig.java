@@ -26,5 +26,46 @@ import com.example.project.service.UserAuthService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApiSecurityConfig  {
+	@Autowired
+	private ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
 
+	@Autowired
+	private UserAuthService userAuthService;
+
+	@Autowired
+	private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		
+		auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		
+		httpSecurity.csrf().disable()
+				
+				.authorizeRequests().antMatchers("/register","/signin").permitAll().
+				
+				anyRequest().authenticated().and().
+				
+				
+				exceptionHandling().authenticationEntryPoint(apiAuthenticationEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		
+		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	}
 }

@@ -11,5 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient,String>{
 
+	Patient findByPatient_Id(int id);
+
+	void deleteByPatient_Id(int id);
+
 }
 
