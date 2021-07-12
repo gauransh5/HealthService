@@ -19,13 +19,18 @@ import com.example.project.Model.ApplicationUser;
 import com.example.project.repository.ApplicationUserRepository;
 import com.example.project.security.JwtUtil;
 
+import net.bytebuddy.asm.Advice.Return;
+
 @Service
 public class ApplicationUserService {
 	@Autowired
 	ApplicationUserRepository repo;
+	
+	@Autowired
+	JwtUtil jwtUtil;
 
 	public ApplicationUser fetchapplicationuser(String id) {
-		return repo.findByUser_name(id);
+		return repo.findById(id).get();
 	}
 
 	public ApplicationUser editapplicationuser(ApplicationUser applicationUser) {
@@ -33,7 +38,8 @@ public class ApplicationUserService {
 	}
 
 	public ApplicationUser registeruser(ApplicationUser applicationUser) {
-		
+		System.out.println(applicationUser.getUser_name());
+		return repo.save(applicationUser);
 	}
 	
 }

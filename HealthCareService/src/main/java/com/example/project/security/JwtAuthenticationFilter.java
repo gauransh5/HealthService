@@ -14,20 +14,18 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.project.Model.ApplicationUser;
 import com.example.project.service.UserAuthService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
-
 @Component
-public class JwtAuthenticationFilter  {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private UserAuthService userAuthService;
+	private UserAuthService jwtUserDetailsService;
 
 	@Autowired
-	private JwtUtil jwtUtil;
+	private JwtUtil jwtTokenUtil;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -39,27 +37,27 @@ public class JwtAuthenticationFilter  {
 		String jwtToken = null;
 		// JWT Token is in the form "Bearer token". Remove Bearer word and get
 		// only the Token
-		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
-				username = jwtUtil.getUsernameFromToken(jwtToken);
+				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
 				System.out.println("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
 				System.out.println("JWT Token has expired");
 			}
 		} else {
-			System.out.println("JWT Token does not begin with Bearer String");
+			logger.warn("JWT Token does not begin with Bearer String");
 		}
 
 		// Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-			ApplicationUser userDetails = (ApplicationUser) this.userAuthService.loadUserByUsername(username);
+			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
 
 			// if token is valid configure Spring Security to manually set
 			// authentication
-			if (jwtUtil.validateToken(jwtToken, userDetails)) {
+			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
 
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
@@ -73,5 +71,4 @@ public class JwtAuthenticationFilter  {
 		}
 		chain.doFilter(request, response);
 	}
-
 }

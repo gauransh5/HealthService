@@ -11,7 +11,6 @@ import javax.persistence.Table;
 @Table
 public class ApplicationUser {
 	@Id
-	@Column
 	 public String user_name;
 	@Column
      public String user_email;

@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +29,13 @@ public class AppointmentController {
 	AppointmentService service;
 	
 	@PostMapping("/appointment/register")
-	public String addAppointment(@RequestBody Appointment appointment)
+	public ResponseEntity<Object> addAppointment(@RequestBody Appointment appointment)
 	{
-		return service.addappointment(appointment);
+		Appointment appointment2 =  service.addappointment(appointment);
+		if(appointment2 != null) {
+			return new ResponseEntity<Object>(new responseBean("Booking successful"),HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(new responseBean("Booking fail"),HttpStatus.OK);
 	}
 	
 	@GetMapping("/appointment/list")
@@ -56,6 +62,24 @@ public class AppointmentController {
 	public void deleteAppointmentById(@PathVariable int id)
 	{
 		service.deleteappointmentbyid(id);
+	}
+	
+}
+class responseBean {
+	String messsage;
+	
+
+	public responseBean(String messsage) {
+		super();
+		this.messsage = messsage;
+	}
+
+	public String getMesssage() {
+		return messsage;
+	}
+
+	public void setMesssage(String messsage) {
+		this.messsage = messsage;
 	}
 	
 }

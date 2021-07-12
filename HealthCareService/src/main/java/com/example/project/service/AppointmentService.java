@@ -19,16 +19,9 @@ public class AppointmentService {
 	@Autowired 
 	private AppointmentRepository repo;
 	
-	public String addappointment(Appointment appointment)
+	public Appointment addappointment(Appointment appointment)
 	{
-		String m;
-		try {
-			repo.save(appointment);
-			m = "Booking successful";
-		} catch (Exception e) {
-			m = "Booking failue";
-		}
-		return "message = " + m;
+		return repo.save(appointment);
 	}
 	
 	public List<Appointment> fetchallappointments()
@@ -36,19 +29,19 @@ public class AppointmentService {
 		return repo.findAll();
 	}
 	
-	public Appointment fetchappointmentbyid(int id)
+	public Appointment fetchappointmentbyid(String id)
 	{
-		return repo.findByBooking_id(id);
+		return repo.findById(id).get();
 	}
 	
-	public List<Appointment> fetchallappointmentsbypatientid(int id)
+	public List<Appointment> fetchallappointmentsbypatientid(String id)
 	{
 		return repo.findAllByPatientId(id);
 	}
 	
-	public void deleteappointmentbyid(int id)
+	public void deleteappointmentbyid(String id)
 	{
-		 repo.deleteByBooking_id(id);
+		 repo.deleteById(id);
 	}
 }
 

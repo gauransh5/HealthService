@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -25,10 +27,10 @@ public class UserAuthService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		ApplicationUser user = repo.findByUser_name(username);
+		ApplicationUser user = repo.findById(username).get();
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found for email" + username);
 		}
-		return new User(user.getUser_name(), user.getPassword(),new ArrayList<>());
+		return new User(user.getUser_name(),new BCryptPasswordEncoder().encode(user.getPassword()),new ArrayList<>());
 	}
 }
